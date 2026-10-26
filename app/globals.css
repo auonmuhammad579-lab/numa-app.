@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-lavender: var(--lavender);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  color-scheme: dark;
+  --background: #080b18;
+  --foreground: #ece9ff;
+  --card: #0e1226;
+  --card-foreground: #ece9ff;
+  --popover: #0e1226;
+  --popover-foreground: #ece9ff;
+  --primary: #8b5cf6;
+  --primary-foreground: #0b0820;
+  --secondary: #151a33;
+  --secondary-foreground: #ece9ff;
+  --muted: #121731;
+  --muted-foreground: #8e93b8;
+  --accent: #1c1840;
+  --accent-foreground: #d9ccff;
+  --lavender: #a78bfa;
+  --destructive: #ff6b8a;
+  --border: rgb(167 139 250 / 0.12);
+  --input: rgb(167 139 250 / 0.16);
+  --ring: #b18cff;
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* ---------- Numa orb ---------- */
+
+.numa-orb {
+  --orb-size: 13rem;
+  /* Hard square: equal width and height + explicit 1:1 aspect ratio so that
+     no flex/grid/row context can stretch or shrink one axis independently
+     and flatten the sphere into a capsule. `flex: none` blocks flex
+     shrinking/stretching; `min-*` caps the same risk on grid tracks. */
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  min-width: 0;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  isolation: isolate;
+  contain: layout style;
+}
+
+.numa-orb:focus-visible {
+  outline: 2px solid var(--lavender);
+  outline-offset: 6px;
+}
+
+/* The canvas is always square and anchored to the button; it must never
+   inherit a non-square size from a parent. We size it off the button's
+   own width via an overlay that scales 1.7x around the centre. */
+.numa-orb__canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--orb-size) * 1.7);
+  height: calc(var(--orb-size) * 1.7);
+  translate: -50% -50%;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+
+.numa-orb:not([data-ready])::before {
+  content: '';
+  width: 72%;
+  height: 72%;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 36% 32%, #dacbff 0%, #8b5cf6 42%, #4022ac 82%, #1c105c 100%);
+  box-shadow: 0 0 60px 10px rgb(139 92 246 / 0.35);
+}
+
+.numa-backdrop {
+  background:
+    radial-gradient(60rem 40rem at 50% 40%, rgb(139 92 246 / 0.12), transparent 60%),
+    radial-gradient(30rem 20rem at 85% 10%, rgb(167 139 250 / 0.06), transparent 70%),
+    var(--background);
+}
+
